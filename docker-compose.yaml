@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  syncskill:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: yarn dev
+    depends_on:
+      - syncskilldb
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/usr/src/app
+
+  syncskilldb:
+    image: mysql:8.0
+    container_name: syncskilldb
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - syncskilldb:/var/lib/mysql
+
+  apacheserver:
+    image: phpmyadmin:latest
+    ports:
+      - '8080:80'
+    depends_on:
+      - syncskilldb
+    environment:
+      PMA_HOST: syncskilldb
+      PMA_USER: ${DB_USERNAME}
+      PMA_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  syncskilldb:
