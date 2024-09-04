@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Request
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user-dto';
+import { AuthGuard } from 'src/core/guards/auth.guard';
 
 @Controller('/v1')
 export class UsersController {
@@ -12,14 +21,15 @@ export class UsersController {
     return {
       status: 'Success',
       data: create,
-      message: 'User Created Successfully',
+      message: 'User Created Successfully'
     };
   }
+
+  @UseGuards(AuthGuard)
   @Get('/users')
-  async getAll() {
+  async getAll(@Request() data) {
     return this.userService.getAll();
   }
-
   @Get('/user/id/:id')
   async getById(@Param() id: string) {
     return this.userService.getById({ id });

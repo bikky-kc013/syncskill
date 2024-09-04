@@ -12,7 +12,7 @@ export class UserRepository {
     try {
       const createUser = this.user.create({
         id: crypto.randomUUID().slice(0, 12),
-        ...data,
+        ...data
       });
       const savedUser = await this.user.save(createUser);
       return savedUser;
@@ -25,14 +25,26 @@ export class UserRepository {
   }
 
   async getById({ id }: { id: string }) {
-    return this.user.findOne({ where: { id: id } });
+    return await this.user.findOne({ where: { id: id } });
   }
 
   async getByUsername({ username }: { username: string }) {
-    return this.user.findOne({ where: { username: username } });
+    return await this.user.findOne({ where: { username: username } });
   }
-  
+
   async getByemail({ email }: { email: string }) {
-    return this.user.findOne({ where: { email } });
+    return await this.user.findOne({
+      where: { email: email },
+      select: [
+        'email',
+        'password',
+        'profile_image',
+        'username',
+        'id',
+        'name',
+        'type',
+        'registredAt'
+      ]
+    });
   }
 }

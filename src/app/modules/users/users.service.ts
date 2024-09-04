@@ -7,7 +7,7 @@ import ORMHelper from 'src/database/helper/ORMHelper';
 export class UsersService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly ormHelper: ORMHelper,
+    private readonly ormHelper: ORMHelper
   ) {}
   async create(data: CreateUserDto) {
     const runner = await this.ormHelper.createQueryRunner();
@@ -35,7 +35,6 @@ export class UsersService {
   async getByUsername({ username }: { username: string }) {
     return this.userRepository.getByUsername({ username });
   }
-
   async getByemail({ email }: { email: string }) {
     return this.userRepository.getByemail({ email });
   }
